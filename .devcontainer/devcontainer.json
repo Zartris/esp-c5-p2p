@@ -1,0 +1,45 @@
+{
+    "name": "ESP-IDF",
+    "image": "espressif/idf:latest",
+    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "idf.espIdfPath": "/opt/esp/idf",
+                "idf.toolsPath": "/opt/esp",
+                "idf.pythonBinPath": "/opt/esp/python_env/idf5.3_py3.8_env/bin/python",
+                "idf.gitPath": "/usr/bin/git",
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "idf.openOcdConfigs": [
+                    "board/esp32c5-builtin.cfg"
+                ],
+                "idf.adapterTargetName": "esp32c5",
+                "idf.flashType": "UART"
+            },
+            "extensions": [
+                "espressif.esp-idf-extension",
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-vscode.cmake-tools",
+                "twxs.cmake",
+                "ms-python.python",
+                "ms-python.debugpy",
+                "formulahendry.code-runner",
+                "ms-vscode.vscode-serial-monitor"
+            ]
+        }
+    },
+    "containerEnv": {
+        "LC_ALL": "C.UTF-8",
+        "LANG": "C.UTF-8"
+    },
+    "mounts": [
+        "source=/dev,target=/dev,type=bind",
+        "source=/run/udev,target=/run/udev,type=bind"
+    ],
+    "privileged": true,
+    "remoteUser": "esp",
+    "postCreateCommand": "sudo chown -R esp:esp /workspace",
+    "forwardPorts": [3333, 9333]
+}

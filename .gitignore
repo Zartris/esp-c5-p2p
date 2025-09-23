@@ -39,3 +39,16 @@
 
 # debug information files
 *.dwo
+
+# ESP-IDF specific
+build/
+sdkconfig
+sdkconfig.old
+
+# Dependencies
+dependencies.lock
+managed_components/
+
+# IDE
+.DS_Store
+.vscode/ipch/

@@ -21,5 +21,8 @@
     "files.associations": {
         "*.h": "c",
         "*.c": "c"
-    }
+    },
+    "idf.pythonInstallPath": "/home/dev/.espressif/python_env/idf5.5_py3.11_env/bin/python",
+    "idf.port": "/dev/ttyACM0",
+    "idf.monitorPort": "/dev/ttyACM0"
 }

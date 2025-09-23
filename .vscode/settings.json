@@ -1,0 +1,25 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.portWin": "COM3",
+    "idf.flashBaudRate": "460800",
+    "idf.monitorBaudRate": "115200",
+    "idf.customExtraPaths": "",
+    "idf.customExtraVars": "",
+    "idf.adapterTargetName": "esp32c5",
+    "idf.openOcdConfigs": [
+        "board/esp32c5-builtin.cfg"
+    ],
+    "idf.saveBeforeBuild": true,
+    "idf.coveredLightTheme": "Red",
+    "idf.coveredDarkTheme": "Dark Red",
+    "idf.partialLightTheme": "Yellow",
+    "idf.partialDarkTheme": "Dark Yellow",
+    "idf.uncoveredLightTheme": "Light Red",
+    "idf.uncoveredDarkTheme": "Red",
+    "editor.suggest.insertMode": "replace",
+    "editor.suggestSelection": "first",
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c"
+    }
+}

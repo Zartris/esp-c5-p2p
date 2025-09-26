@@ -25,7 +25,7 @@ Once the container is running:
    ```bash
    idf.py build
    ```
-3. Connect your ESP32-C5 development board via USB
+3. Connect your ESP32-C5 development board(s) via USB
 4. Flash the firmware:
    ```bash
    idf.py flash
@@ -34,6 +34,56 @@ Once the container is running:
    ```bash
    idf.py monitor
    ```
+
+### Multi-Device Testing
+
+For testing ESP-NOW communication between multiple devices:
+
+#### Step 1: Find Connected Devices
+```bash
+# List all connected USB serial devices
+ls /dev/tty* | grep -E "(ACM|USB)"
+
+# Or check recent USB connections
+dmesg | tail -20
+```
+
+#### Step 2: Flash Multiple Devices
+```bash
+# Flash first device (e.g., coordinator)
+idf.py -p /dev/ttyACM0 flash
+
+# Flash second device (e.g., peer)
+idf.py -p /dev/ttyACM1 flash
+
+# Or use USB ports if that's how they appear
+idf.py -p /dev/ttyUSB0 flash
+idf.py -p /dev/ttyUSB1 flash
+```
+
+#### Step 3: Monitor Both Devices
+Open **two separate terminals**:
+
+**Terminal 1** (Monitor first device):
+```bash
+idf.py -p /dev/ttyACM0 monitor
+```
+
+**Terminal 2** (Monitor second device):
+```bash
+idf.py -p /dev/ttyACM1 monitor
+```
+
+#### Combined Commands
+```bash
+# Build, flash, and monitor specific device in one command
+idf.py -p /dev/ttyACM0 build flash monitor
+
+# Just flash and monitor
+idf.py -p /dev/ttyACM1 flash monitor
+```
+
+**Note**: Replace `/dev/ttyACM0`, `/dev/ttyACM1` with the actual ports your devices connect to.
 
 ### 3. Using VS Code Tasks
 

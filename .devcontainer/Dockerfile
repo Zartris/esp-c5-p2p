@@ -63,6 +63,7 @@ RUN ["dash", "-c", "\
      valgrind \
      wget \
      xxd \
+     curl \
  && apt-get clean \
  && apt-get purge \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -109,5 +110,49 @@ RUN ["dash", "-c", "\
 # Step 4. Set up the environment variables
 # https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/linux-macos-setup.html#step-4-set-up-the-environment-variables
 RUN echo "source /home/${USER}/esp/idf/export.sh" >> /home/${USER}/.bashrc
+
+# Install NVM and Node.js
+ENV NVM_VERSION=v0.39.7
+ENV NODE_VERSION=lts/*
+ENV NVM_DIR=/home/${USER}/.nvm
+
+RUN ["dash", "-c", "\
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash \
+ && . ${NVM_DIR}/nvm.sh \
+ && nvm install ${NODE_VERSION} \
+ && nvm use ${NODE_VERSION} \
+ && nvm alias default ${NODE_VERSION} \
+"]
+
+# Add NVM and Node.js to PATH
+RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/${USER}/.bashrc
+RUN echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/${USER}/.bashrc
+RUN echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /home/${USER}/.bashrc
+
+# Install Claude Code globally
+RUN ["dash", "-c", "\
+    . ${NVM_DIR}/nvm.sh \
+ && npm install -g @anthropic-ai/claude-code \
+"]
+
+# Install Claude Code Usage Monitor (Python package)
+## Install claude-monitor using uv (avoid PEP 668 system Python restrictions)
+ENV PATH="/root/.local/bin:/home/${USER}/.local/bin:${PATH}"
+RUN ["dash", "-c", "\
+        set -eu; \
+        if ! command -v curl >/dev/null 2>&1; then \
+            apt-get update --quiet && apt-get install -y --no-install-recommends curl ca-certificates && apt-get clean; \
+        fi; \
+        echo 'Installing uv package manager'; \
+        curl -LsSf https://astral.sh/uv/install.sh | sh; \
+        echo 'Installing claude-monitor via uv tool install'; \
+        uv tool install claude-monitor; \
+        echo 'Smoke test:'; \
+        claude-monitor --version \
+"]
+
+# Add ~/.local/bin to PATH for pip user installs
+ENV PATH="/home/${USER}/.local/bin:${PATH}"
+
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
